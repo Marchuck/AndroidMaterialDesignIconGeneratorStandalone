@@ -7,9 +7,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import javax.swing.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 
 public class App extends Application implements AppCallbacks {
@@ -19,6 +24,8 @@ public class App extends Application implements AppCallbacks {
     }
 
     AppPresenter presenter;
+
+    Label filePreview;
 
     @Override
     public void start(Stage primaryStage) {
@@ -32,8 +39,7 @@ public class App extends Application implements AppCallbacks {
          */
         Row firstRow = new Row();
 
-        Label inputFileLabel = new Label("Select image");
-        Button inputFileButton = new Button("...");
+        Button inputFileButton = new Button("Select image");
         inputFileButton.setOnAction((c) -> {
             FileChooser chooser = new FileChooser();
 
@@ -41,7 +47,18 @@ public class App extends Application implements AppCallbacks {
             presenter.onFileSelected(image);
         });
 
-        firstRow.addAll(inputFileLabel, inputFileButton);
+        firstRow.addAll(inputFileButton);
+        /**
+         * second row
+         */
+        Row second = new Row();
+        TextField nameField = new TextField("filename.png");
+
+        second.add(nameField);
+        filePreview = new Label();
+        second.add(filePreview);
+
+
         rootView.addAll(firstRow);
 
         /**
@@ -60,6 +77,8 @@ public class App extends Application implements AppCallbacks {
     @Override
     public void init() throws Exception {
         super.init();
+        System.out.println("init");
+
     }
 
     @Override
@@ -67,5 +86,14 @@ public class App extends Application implements AppCallbacks {
         super.stop();
         presenter.stop();
         presenter = null;
+        System.out.println("stop");
+
+    }
+
+    @Override
+    public void loadIcon(WritableImage icon) {
+        System.out.println("loadIcon");
+
+        filePreview.setGraphic(new ImageView(icon));
     }
 }
